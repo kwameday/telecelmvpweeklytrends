@@ -1,0 +1,64 @@
+{
+  "weeks": [
+    {
+      "labelShort": "W1",
+      "period": "Week 1 (Oct 21–24)",
+      "totalTransactions": 13,
+      "successfulTransactions": 12,
+      "gmv": 379,
+      "aov": 34.5,
+      "highestOrder": 55,
+      "cashback": 6.78,
+      "totalUsers": 13,
+      "uniqueUsers": 11
+    },
+    {
+      "labelShort": "W2",
+      "period": "Week 2 (Oct 26–31)",
+      "totalTransactions": 10,
+      "successfulTransactions": 10,
+      "gmv": 202,
+      "aov": 23.33,
+      "highestOrder": 80,
+      "cashback": 4.04,
+      "totalUsers": 10,
+      "uniqueUsers": 10
+    },
+    {
+      "labelShort": "W3",
+      "period": "Week 3 (Nov 3–7)",
+      "totalTransactions": 45,
+      "successfulTransactions": 39,
+      "gmv": 1774,
+      "aov": 28.4,
+      "highestOrder": 200,
+      "cashback": 34.02,
+      "totalUsers": 45,
+      "uniqueUsers": 40
+    },
+    {
+      "labelShort": "W4",
+      "period": "Week 4 (Nov 10–14)",
+      "totalTransactions": 47,
+      "successfulTransactions": 45,
+      "gmv": 2178,
+      "aov": 48.67,
+      "highestOrder": 200,
+      "cashback": 43.56,
+      "totalUsers": 47,
+      "uniqueUsers": 43
+    },
+    {
+      "labelShort": "W5",
+      "period": "Week 5 (Nov 17–18)",
+      "totalTransactions": 47,
+      "successfulTransactions": 44,
+      "gmv": 1983,
+      "aov": 45.43,
+      "highestOrder": 120,
+      "cashback": 37.26,
+      "totalUsers": 43,
+      "uniqueUsers": 40
+    }
+  ]
+}

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Telecel Marketplace – Weekly Trends Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Weekly performance trends for the Telecel Marketplace pilot." />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 52%);
+      color: #e5e7eb;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 14px;
+      padding: 16px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .card-subtitle {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .stat {
+      font-size: 0.86rem;
+    }
+
+    .stat-label {
+      color: #9ca3af;
+      margin-right: 4px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      margin-left: 4px;
+    }
+
+    .chip-up {
+      color: #4ade80;
+      border-color: #4ade80;
+    }
+
+    .chip-down {
+      color: #f97373;
+      border-color: #f97373;
+    }
+
+    .chip-flat {
+      color: #9ca3af;
+      border-color: #9ca3af;
+    }
+
+    svg {
+      width: 100%;
+      height: 110px;
+    }
+
+    .line-primary {
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    .line-secondary {
+      fill: none;
+      stroke-width: 2;
+      stroke-dasharray: 4 3;
+    }
+
+    .dot {
+      r: 3;
+      cursor: pointer;
+    }
+
+    .axis-line {
+      stroke: rgba(148, 163, 184, 0.25);
+      stroke-width: 1;
+    }
+
+    .x-labels {
+      font-size: 0.68rem;
+      fill: #9ca3af;
+    }
+
+    .legend {
+      display: flex;
+      gap: 12px;
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-swatch {
+      width: 10px;
+      height: 3px;
+      border-radius: 999px;
+    }
+
+    .muted {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .tooltip {
+      position: fixed;
+      z-index: 50;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 0.75rem;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      pointer-events: none;
+      display: none;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Telecel Marketplace – Weekly Performance Trends</h1>
+  <div class="subtitle">Weeks: Oct 21 – Nov 18, 2025</div>
+
+  <div class="grid">
+    <!-- Card 1: Total & Successful Transactions -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Weekly Transactions</div>
+          <div class="card-subtitle">Total vs Successful</div>
+        </div>
+      </div>
+
+      <div class="stat-row" id="tx-stats"></div>
+
+      <svg id="chart-tx"></svg>
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-swatch" style="background:#38bdf8;"></span> Total
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch" style="background:#a5b4fc;"></span> Successful
+        </div>
+      </div>
+      <div class="muted">Trend by week (higher is better).</div>
+    </div>
+
+    <!-- Card 2: GMV -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">GMV (Completed)</div>
+          <div class="card-subtitle">Weekly GMV in GHC</div>
+        </div>
+      </div>
+      <div class="stat-row" id="gmv-stats"></div>
+      <svg id="chart-gmv"></svg>
+      <div class="muted">GMV evolution across the pilot weeks.</div>
+    </div>
+
+    <!-- Card 3: Average Order Value -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Average Order Value (AOV)</div>
+          <div class="card-subtitle">Weekly AOV in GHC</div>
+        </div>
+      </div>
+      <div class="stat-row" id="aov-stats"></div>
+      <svg id="chart-aov"></svg>
+      <div class="muted">Average value of successful orders per week.</div>
+    </div>
+
+    <!-- Card 4: Highest Order Value -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Highest Order Value</div>
+          <div class="card-subtitle">Weekly peak order in GHC</div>
+        </div>
+      </div>
+      <div class="stat-row" id="hov-stats"></div>
+      <svg id="chart-hov"></svg>
+      <div class="muted">Maximum single order value captured each week.</div>
+    </div>
+
+    <!-- Card 5: Total Cashback -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Total Cashback</div>
+          <div class="card-subtitle">Weekly cashback paid (GHC)</div>
+        </div>
+      </div>
+      <div class="stat-row" id="cb-stats"></div>
+      <svg id="chart-cb"></svg>
+      <div class="muted">Higher trend indicates more rewards issued.</div>
+    </div>
+
+    <!-- Card 6: Users & Unique Users -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Weekly Users</div>
+          <div class="card-subtitle">Total vs Unique users</div>
+        </div>
+      </div>
+      <div class="stat-row" id="user-stats"></div>
+      <svg id="chart-users"></svg>
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-swatch" style="background:#22c55e;"></span> Total Users
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch" style="background:#f97316;"></span> Unique Users
+        </div>
+      </div>
+      <div class="muted">Indicates weekly reach vs repeat usage.</div>
+    </div>
+  </div>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <script>
+    async function main() {
+      const res = await fetch('weekly-data.json', { cache: 'no-store' });
+      const json = await res.json();
+      const weeksData = json.weeks || [];
+
+      const labels = weeksData.map(w => w.labelShort);
+      const periods = weeksData.map(w => w.period);
+
+      const totals = weeksData.map(w => w.totalTransactions);
+      const successes = weeksData.map(w => w.successfulTransactions);
+      const gmv = weeksData.map(w => w.gmv);
+      const aov = weeksData.map(w => w.aov);
+      const hov = weeksData.map(w => w.highestOrder);
+      const cb = weeksData.map(w => w.cashback);
+      const totalUsers = weeksData.map(w => w.totalUsers);
+      const uniqueUsers = weeksData.map(w => w.uniqueUsers);
+
+      // Helper to compute percent change vs previous week
+      function pctChange(curr, prev) {
+        if (prev === 0) return null;
+        return ((curr - prev) / prev) * 100;
+      }
+
+      function pctChip(pct, referenceLabel) {
+        if (pct === null) {
+          return '<span class="chip chip-flat">— vs ' + referenceLabel + '</span>';
+        }
+        const rounded = pct.toFixed(1);
+        if (Math.abs(pct) < 0.1) {
+          return '<span class="chip chip-flat">↔ 0% vs ' + referenceLabel + '</span>';
+        }
+        if (pct > 0) {
+          return '<span class="chip chip-up">▲ ' + rounded + '% vs ' + referenceLabel + '</span>';
+        }
+        return '<span class="chip chip-down">▼ ' + Math.abs(rounded) + '% vs ' + referenceLabel + '</span>';
+      }
+
+      // Tooltip helpers
+      const tooltip = document.getElementById('tooltip');
+
+      function showTooltip(e) {
+        const t = e.target;
+        const week = t.getAttribute('data-week');
+        const period = t.getAttribute('data-period');
+        const series = t.getAttribute('data-series');
+        const value = t.getAttribute('data-value');
+        const suffix = t.getAttribute('data-suffix') || '';
+
+        tooltip.innerText = week + ' • ' + series + ': ' + value + suffix + '\n' + period;
+        tooltip.style.display = 'block';
+        moveTooltip(e);
+      }
+
+      function moveTooltip(e) {
+        const offset = 10;
+        tooltip.style.left = (e.clientX + offset) + 'px';
+        tooltip.style.top = (e.clientY - 30) + 'px';
+      }
+
+      function hideTooltip() {
+        tooltip.style.display = 'none';
+      }
+
+      // Tiny SVG line chart renderer
+      function renderLineChart(svgId, labels, seriesList) {
+        const svg = document.getElementById(svgId);
+        const width = 320;
+        const height = 90;
+        const padding = 10;
+        svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+
+        const allValues = seriesList.flatMap(s => s.data);
+        const minVal = Math.min(...allValues);
+        const maxVal = Math.max(...allValues);
+        const yMin = minVal === maxVal ? minVal - 1 : minVal;
+        const yMax = minVal === maxVal ? maxVal + 1 : maxVal;
+
+        const n = labels.length;
+        const stepX = (width - padding * 2) / (n - 1 || 1);
+
+        // Horizontal baseline
+        const axis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        axis.setAttribute('x1', padding);
+        axis.setAttribute('x2', width - padding);
+        axis.setAttribute('y1', height - padding);
+        axis.setAttribute('y2', height - padding);
+        axis.setAttribute('class', 'axis-line');
+        svg.appendChild(axis);
+
+        // X labels
+        labels.forEach((lbl, i) => {
+          const x = padding + i * stepX;
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x);
+          text.setAttribute('y', height - 2);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('class', 'x-labels');
+          text.textContent = lbl;
+          svg.appendChild(text);
+        });
+
+        function yScale(v) {
+          if (yMax === yMin) return height / 2;
+          const t = (v - yMin) / (yMax - yMin);
+          return (height - padding) - t * (height - padding * 2);
+        }
+
+        // Draw series
+        seriesList.forEach((series, idx) => {
+          let d = '';
+          const points = [];
+
+          series.data.forEach((v, i) => {
+            const x = padding + i * stepX;
+            const y = yScale(v);
+            points.push({ x, y, value: v, index: i });
+            d += (i === 0 ? 'M' : 'L') + x + ' ' + y + ' ';
+          });
+
+          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('d', d.trim());
+          path.setAttribute('class', idx === 0 ? 'line-primary' : 'line-secondary');
+          path.setAttribute('stroke', series.color);
+          svg.appendChild(path);
+
+          points.forEach(pt => {
+            const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            c.setAttribute('cx', pt.x);
+            c.setAttribute('cy', pt.y);
+            c.setAttribute('r', 3);
+            c.setAttribute('class', 'dot');
+            c.setAttribute('fill', series.color);
+            c.setAttribute('data-week', labels[pt.index]);
+            c.setAttribute('data-period', periods[pt.index]);
+            c.setAttribute('data-series', series.name);
+            c.setAttribute('data-value', series.formatValue(pt.value));
+            c.setAttribute('data-suffix', series.suffix || '');
+            c.addEventListener('mouseenter', showTooltip);
+            c.addEventListener('mousemove', moveTooltip);
+            c.addEventListener('mouseleave', hideTooltip);
+            svg.appendChild(c);
+          });
+        });
+      }
+
+      // Populate cards using last vs previous week
+      if (weeksData.length < 2) return;
+
+      const lastIndex = weeksData.length - 1;
+      const prevIndex = weeksData.length - 2;
+      const lastLabelShort = weeksData[lastIndex].labelShort;
+      const prevLabelShort = weeksData[prevIndex].labelShort;
+
+      // 1. Transactions
+      (function () {
+        const statDiv = document.getElementById('tx-stats');
+        const lastTotal = totals[lastIndex];
+        const prevTotal = totals[prevIndex];
+        const lastSucc = successes[lastIndex];
+        const prevSucc = successes[prevIndex];
+
+        const pctTotal = pctChange(lastTotal, prevTotal);
+        const pctSucc = pctChange(lastSucc, prevSucc);
+
+        statDiv.innerHTML =
+          '<div class="stat">' +
+          '<span class="stat-label">' + lastLabelShort + ' Total:</span>' + lastTotal +
+          ' ' + pctChip(pctTotal, prevLabelShort) +
+          '</div>' +
+          '<div class="stat">' +
+          '<span class="stat-label">' + lastLabelShort + ' Successful:</span>' + lastSucc +
+          ' ' + pctChip(pctSucc, prevLabelShort) +
+          '</div>';
+
+        renderLineChart('chart-tx', labels, [
+          {
+            data: totals,
+            color: '#38bdf8',
+            name: 'Total Transactions',
+            suffix: '',
+            formatValue: v => v.toString()
+          },
+          {
+            data: successes,
+            color: '#a5b4fc',
+            name: 'Successful Transactions',
+            suffix: '',
+            formatValue: v => v.toString()
+          }
+        ]);
+      })();
+
+      // 2. GMV
+      (function () {
+        const statDiv = document.getElementById('gmv-stats');
+        const last = gmv[lastIndex];
+        const prev = gmv[prevIndex];
+        const pct = pctChange(last, prev);
+        statDiv.innerHTML =
+          '<div class="stat">' +
+          '<span class="stat-label">' + lastLabelShort + ' GMV:</span>GHC ' +
+          last.toLocaleString(undefined, { maximumFractionDigits: 0 }) +
+          ' ' + pctChip(pct, prevLabelShort) +
+          '</div>';
+
+        renderLineChart('chart-gmv', labels, [
+          {
+            data: gmv,
+            color: '#22c55e',
+            name: 'GMV',
+            suffix: ' GHC',
+            formatValue: v => v.toLocaleString(undefined, { maximumFractionDigits: 0 })
+          }
+        ]);
+      })();
+
+      // 3. AOV
+      (function () {
+        const statDiv = document.getElementById('aov-stats');
+        const last = aov[lastIndex];
+        const prev = aov[prevIndex];
+        const pct = pctChange(last, prev);
+        statDiv.innerHTML =
+          '<div class="stat">' +
+          '<span class="stat-label">' + lastLabelShort + ' AOV:</span>GHC ' +
+          last.toFixed(2) +
+          ' ' + pctChip(pct, prevLabelShort) +
+          '</div>';
+
+        renderLineChart('chart-aov', labels, [
+          {
+            data: aov,
+            color: '#f97316',
+            name: 'Average Order Value',
+            suffix: ' GHC',
+            formatValue: v => v.toFixed(2)
+          }
+        ]);
+      })();
+
+      // 4. Highest Order Value
+      (function () {
+        const statDiv = document.getElementById('hov-stats');
+        const last = hov[lastIndex];
+        const prev = hov[prevIndex];
+        const pct = pctChange(last, prev);
+        statDiv.innerHTML =
+          '<div class="stat">' +
+          '<span class="stat-label">' + lastLabelShort + ' Peak Order:</span>GHC ' +
+          last.toLocaleString() +
+          ' ' + pctChip(pct, prevLabelShort) +
+          '</div>';
+
+        renderLineChart('chart-hov', labels, [
+          {
+            data: hov,
+            color: '#eab308',
+            name: 'Highest Order Value',
+            suffix: ' GHC',
+            formatValue: v => v.toLocaleString()
+          }
+        ]);
+      })();
+
+      // 5. Total Cashback
+      (function () {
+        const statDiv = document.getElementById('cb-stats');
+        const last = cb[lastIndex];
+        const prev = cb[prevIndex];
+        const pct = pctChange(last, prev);
+        statDiv.innerHTML =
+          '<div class="stat">' +
+          '<span class="stat-label">' + lastLabelShort + ' Cashback:</span>GHC ' +
+          last.toFixed(2) +
+          ' ' + pctChip(pct, prevLabelShort) +
+          '</div>';
+
+        renderLineChart('chart-cb', labels, [
+          {
+            data: cb,
+            color: '#06b6d4',
+            name: 'Total Cashback',
+            suffix: ' GHC',
+            formatValue: v => v.toFixed(2)
+          }
+        ]);
+      })();
+
+      // 6. Users
+      (function () {
+        const statDiv = document.getElementById('user-stats');
+        const lastT = totalUsers[lastIndex];
+        const prevT = totalUsers[prevIndex];
+        const lastU = uniqueUsers[lastIndex];
+        const prevU = uniqueUsers[prevIndex];
+        const pctT = pctChange(lastT, prevT);
+        const pctU = pctChange(lastU, prevU);
+
+        statDiv.innerHTML =
+          '<div class="stat">' +
+          '<span class="stat-label">' + lastLabelShort + ' Total Users:</span>' + lastT +
+          ' ' + pctChip(pctT, prevLabelShort) +
+          '</div>' +
+          '<div class="stat">' +
+          '<span class="stat-label">' + lastLabelShort + ' Unique Users:</span>' + lastU +
+          ' ' + pctChip(pctU, prevLabelShort) +
+          '</div>';
+
+        renderLineChart('chart-users', labels, [
+          {
+            data: totalUsers,
+            color: '#22c55e',
+            name: 'Total Users',
+            suffix: '',
+            formatValue: v => v.toString()
+          },
+          {
+            data: uniqueUsers,
+            color: '#f97316',
+            name: 'Unique Users',
+            suffix: '',
+            formatValue: v => v.toString()
+          }
+        ]);
+      })();
+    }
+
+    main().catch(err => {
+      console.error('Failed to load weekly-data.json', err);
+      const warn = document.createElement('div');
+      warn.textContent = 'Failed to load weekly-data.json. Ensure it is present at the site root.';
+      warn.style.color = '#f87171';
+      warn.style.marginTop = '12px';
+      document.body.appendChild(warn);
+    });
+  </script>
+</body>
+</html>
