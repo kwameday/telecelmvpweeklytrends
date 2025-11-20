@@ -50,15 +50,15 @@
     },
     {
       "labelShort": "W5",
-      "period": "Week 5 (Nov 17–18)",
-      "totalTransactions": 47,
-      "successfulTransactions": 44,
-      "gmv": 1983,
-      "aov": 45.43,
-      "highestOrder": 120,
-      "cashback": 37.26,
-      "totalUsers": 43,
-      "uniqueUsers": 40
+      "period": "Week 5 (Nov 17–20)",
+      "totalTransactions": 72,
+      "successfulTransactions": 69,
+      "gmv": 3493,
+      "aov": 50.42,
+      "highestOrder": 176,
+      "cashback": 67.46,
+      "totalUsers": 68,
+      "uniqueUsers": 64
     }
   ]
 }
