@@ -63,14 +63,14 @@
     {
       "labelShort": "W6",
       "period": "Week 5 (Nov 24–28)",
-      "totalTransactions": 17,
-      "successfulTransactions": 14,
-      "gmv": 564,
-      "aov": 40.29,
-      "highestOrder": 80,
-      "cashback": 11.28,
-      "totalUsers": 15,
-      "uniqueUsers": 0
+      "totalTransactions": 52,
+      "successfulTransactions": 48,
+      "gmv": 1895,
+      "aov": 39.72,
+      "highestOrder": 120,
+      "cashback": 30.70,
+      "totalUsers": 44,
+      "uniqueUsers": 4
     }
   ]
 }
