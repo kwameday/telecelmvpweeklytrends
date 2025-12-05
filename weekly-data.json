@@ -75,14 +75,14 @@
     {
       "labelShort": "W7",
       "period": "Week 7 (Dec 1–5)",
-      "totalTransactions": 56,
-      "successfulTransactions": 54,
-      "gmv": 2352,
-      "aov": 43.59,
+      "totalTransactions": 78,
+      "successfulTransactions": 76,
+      "gmv": 3155,
+      "aov": 41.23,
       "highestOrder": 120,
-      "cashback": 45.92,
-      "totalUsers": 52,
-      "uniqueUsers": 52
+      "cashback": 57.44,
+      "totalUsers": 67,
+      "uniqueUsers": 67
     }
   ]
 }
