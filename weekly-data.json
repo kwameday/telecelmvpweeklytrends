@@ -83,6 +83,17 @@
       "cashback": 57.44,
       "totalUsers": 67,
       "uniqueUsers": 67
-    }
+    },
+    {
+      "labelShort": "W8",
+      "period": "Week 8 (Dec 8–12)",
+      "totalTransactions": 51,
+      "successfulTransactions": 49,
+      "gmv": 2223,
+      "aov": 44.73,
+      "highestOrder": 100,
+      "cashback": 44.46,
+      "totalUsers": 45,
+      "uniqueUsers": 45
   ]
 }
