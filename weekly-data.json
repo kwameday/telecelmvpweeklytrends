@@ -87,14 +87,14 @@
     {
       "labelShort": "W8",
       "period": "Week 8 (Dec 8–12)",
-      "totalTransactions": 51,
-      "successfulTransactions": 49,
-      "gmv": 2223,
-      "aov": 44.73,
-      "highestOrder": 100,
-      "cashback": 44.46,
-      "totalUsers": 45,
-      "uniqueUsers": 45
+      "totalTransactions": 70,
+      "successfulTransactions": 67,
+      "gmv": 3072,
+      "aov": 45.42,
+      "highestOrder": 110,
+      "cashback": 61.44,
+      "totalUsers": 61,
+      "uniqueUsers": 61
     }
   ]
 }
