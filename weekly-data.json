@@ -99,14 +99,14 @@
      {
       "labelShort": "W9",
       "period": "Week 9 (Dec 15–19)",
-      "totalTransactions": 19,
-      "successfulTransactions": 19,
-      "gmv": 926,
-      "aov": 48.74,
+      "totalTransactions": 48,
+      "successfulTransactions": 48,
+      "gmv": 2275,
+      "aov": 47.63,
       "highestOrder": 145,
-      "cashback": 16.42,
-      "totalUsers": 19,
-      "uniqueUsers": 19
+      "cashback": 37.38,
+      "totalUsers": 38,
+      "uniqueUsers": 38
     }
   ]
 }
